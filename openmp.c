@@ -22,7 +22,6 @@ float* generate_histogram_subdivision(float a, float b, int n, int c, int thread
     limits_each_subdvision[0] = a;
     limits_each_subdvision[c] = b;
 
-//#   pragma omp parallel for num_threads(thread_count)
     for(int i = 1; i < c; i++){
         limits_each_subdvision[i] = limits_each_subdvision[i-1] + difference_each_subdivision;
     }
@@ -54,9 +53,6 @@ int* generate_histogram_frequency(float* data, int* histogram, float a, float b,
 
 int main(int argc, char* argv[]){
     int thread_count = strtol(argv[1], NULL, 10); 
-
-    // float a = 0, b = 5;
-    // int c = 5, n = 20;
 
     float a, b;
     int c, n;
