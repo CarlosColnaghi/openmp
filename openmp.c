@@ -34,15 +34,15 @@ int* generate_histogram_frequency(float* data, int* histogram, float a, float b,
 
     float* limits_each_subdvision = generate_histogram_subdivision(a, b, n, c, thread_count);
 
-    int amount_data_each_subdivision = n/thread_count;
-    if((n%thread_count != 0) && (my_rank == 0)){
-        amount_data_each_subdivision += n%thread_count;
+    int amount_data_each_subdivision = n/thread_count, rest_division = 0;
+    if((n%thread_count != 0) && (my_rank == thread_count-1)){
+        rest_division = n%thread_count;
     }
-
-    for(int i = amount_data_each_subdivision * my_rank; i < (amount_data_each_subdivision * my_rank) + amount_data_each_subdivision; i++){
-        for(int j = 0; j < c; j++){
+    for(int i = amount_data_each_subdivision * my_rank; i < (amount_data_each_subdivision * my_rank) + amount_data_each_subdivision + rest_division; i++){
+        for(int j = 0; j < c; j++){    
             if(data[i] >= limits_each_subdvision[j] && data[i] < limits_each_subdvision[j+1]){
-#               pragma omp critical
+        
+#           pragma omp critical
                 histogram[j] += 1;
             }
         }
